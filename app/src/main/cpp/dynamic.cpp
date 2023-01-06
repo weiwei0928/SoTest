@@ -21,7 +21,25 @@ jint add(JNIEnv *jniEnv, jclass jobject1, jint jint1, jint jint2) {
     return jint1 + jint2;
 }
 
-static JNINativeMethod gMethod[] = {
+
+/**
+ * 方法签名的组成规则为：(参数类型标识1参数类型标识2…参数类型标识n)返回值类型标识
+ * 类型标识	Java数据类型
+ * Z	        boolean
+ * B	        byte
+ * C	        char
+ * S	        short
+ * I	        int
+ * J	        long
+ * F	        float
+ * D	        double
+ * L包名/类名;	各种引用类型
+ * V	        void
+ *
+ * cd到编译出来的class目录下  执行 javap -s 全类名  也可以查看签名  举例： cd tmp/kotlin-classes   javap -s com.ww.sotest.MainActivity
+ *
+ * */
+static JNINativeMethod nativeMethod[] = {
         {"add", "(II)I", (void *) add},
 };
 
@@ -36,12 +54,12 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     }
 
     // 通过JNI层提供的FindClass方法找到JAVA层中声明了native方法的类(可以理解JNI层调用JAVA的类)
-//    jclass clazz = (*env).FindClass(env,"com/confused/testjni/Dynamic");
     jclass clazz = (*env).FindClass("com/ww/sotest/Dynamic");
 
     // JNI层的注册方法(用来本地注册JNINativeMethod数组里的映射关系,绑定+注册->才可以起到JAVA层调用JNI层本地方法的效果)
     // 注册成功会返回1,否则返回-1
-    int result = (*env).RegisterNatives(clazz, gMethod, sizeof(gMethod) / sizeof(gMethod[0]));
+    int result = (*env).RegisterNatives(clazz, nativeMethod,
+                                        sizeof(nativeMethod) / sizeof(nativeMethod[0]));
     /**JNI_OnLoad()方法参数:
     * JavaVM *vm : java虚拟机   (固定格式: JavaVM *变量名)
     * void *reserved : 整体都是固定格式

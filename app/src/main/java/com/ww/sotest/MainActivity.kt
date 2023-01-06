@@ -24,11 +24,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.sampleText.setOnClickListener {
 
-            Log.d(TAG, "onCreate: ${Dynamic.add(8,9)}")
-            Toast.makeText(this@MainActivity,Dynamic.add(5,8),Toast.LENGTH_LONG).show()
+            Log.d(TAG, "onCreate: ${Dynamic.add(8, 9)}")
+            Toast.makeText(this@MainActivity, Dynamic.add(5, 8).toString(), Toast.LENGTH_LONG).show()
         }
     }
-
 
 
     /**
